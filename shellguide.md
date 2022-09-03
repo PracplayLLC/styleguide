@@ -14,8 +14,6 @@ See README.md for details.
 
 Revision 2.02
 
-Authored, revised and maintained by many Googlers.
-
 ## Table of Contents
 
 Section                                                                              | Contents
@@ -39,20 +37,12 @@ Section                                                                         
 
 ### Which Shell to Use
 
-Bash is the only shell scripting language permitted for
-executables.
+If it passes shellcheck it should be ok.
 
-Executables must start with `#!/bin/bash` and a minimum
+Executables should strongly prefer start with `#!/bin/sh` and a minimum
 number of flags. Use `set` to set shell options so that
 calling your script as `bash script_name`
 does not break its functionality.
-
-Restricting all executable shell scripts to *bash* gives us a
-consistent shell language that's installed on all our machines.
-
-The only exception to this is where you're forced to by whatever
-you're coding for. One example of this is Solaris SVR4 packages
-which require plain Bourne shell for any scripts.
 
 <a id="s1.2-when-to-use-shell"></a>
 
@@ -62,7 +52,7 @@ Shell should only be used for small utilities or simple wrapper
 scripts.
 
 While shell scripting isn't a development language, it is used for
-writing various utility scripts throughout Google. This style guide
+writing various utility scripts throughout pracplay. This style guide
 is more a recognition of its use rather than a suggestion that it be
 used for widespread deployment.
 
@@ -71,11 +61,10 @@ Some guidelines:
 *   If you're mostly calling other utilities and are doing relatively
     little data manipulation, shell is an acceptable choice for the task.
 *   If performance matters, use something other than shell.
-*   If you are writing a script that is more than 100 lines long, or
-    that uses non-straightforward control flow logic, you should
-    rewrite it in a more structured language *now*. Bear in
-    mind that scripts grow. Rewrite your script early to avoid a more
-    time-consuming rewrite at a later date.
+*   If there is a lot of inconsistencies to input, use something other than a shell
+*   If there are plenty of edge cases to consider or error on, don't use shell
+*   In most cases shell scripts should be self-contained, simple and straightforward
+*   Bear in mind that scripts grow. Rewrite your script early
 *   When assessing the complexity of your code (e.g. to decide whether
     to switch languages) consider whether the code is easily
     maintainable by people other than its author.
@@ -88,19 +77,8 @@ Some guidelines:
 
 ### File Extensions
 
-Executables should have no extension (strongly preferred) or a
-`.sh` extension. Libraries must have a `.sh`
-extension and should not be executable.
-
-It is not necessary to know what language a program is written in when
-executing it and shell doesn't require an extension so we prefer not
-to use one for executables.
-
-However, for libraries it's important to know what language it is and
-sometimes there's a need to have similar libraries in different
-languages. This allows library files with identical purposes but
-different languages to be identically named except for the
-language-specific suffix.
+Executables should have an `.sh` extension.
+Don't write libraries as shell scripts.
 
 <a id="s2.2-suid-sgid"></a>
 
@@ -128,7 +106,7 @@ All error messages should go to `STDERR`.
 This makes it easier to separate normal status from actual issues.
 
 A function to print out error messages along with other status
-information is recommended.
+information can be considered.
 
 ```shell
 err() {
@@ -147,22 +125,7 @@ fi
 
 <a id="s4.1-file-header"></a>
 
-### File Header
-
-Start each file with a description of its contents.
-
-Every file must have a top-level comment including a brief overview of
-its contents. A
-copyright notice
-and author information are optional.
-
-Example:
-
-```shell
-#!/bin/bash
-#
-# Perform hot backups of Oracle databases.
-```
+File headers are not required, instead prefer a help message when the script is run w/no arguments.
 
 <a id="s4.2-function-comments"></a>
 
@@ -188,19 +151,16 @@ All function comments should describe the intended API behaviour using:
 Example:
 
 ```shell
-#######################################
 # Cleanup files from the backup directory.
 # Globals:
 #   BACKUP_DIR
 #   ORACLE_SID
 # Arguments:
 #   None
-#######################################
 function cleanup() {
   …
 }
 
-#######################################
 # Get configuration directory.
 # Globals:
 #   SOMEDIR
@@ -208,18 +168,15 @@ function cleanup() {
 #   None
 # Outputs:
 #   Writes location to stdout
-#######################################
 function get_dir() {
   echo "${SOMEDIR}"
 }
 
-#######################################
 # Delete a file in a sophisticated manner.
 # Arguments:
 #   File to delete, a path.
 # Returns:
 #   0 if thing was deleted, non-zero on error.
-#######################################
 function del_thing() {
   rm "$1"
 }
@@ -232,10 +189,6 @@ function del_thing() {
 Comment tricky, non-obvious, interesting or important parts of your
 code.
 
-This follows general Google coding comment practice. Don't comment
-everything. If there's a complex algorithm or you're doing something
-out of the ordinary, put a short comment in.
-
 <a id="s4.4-todo-comments"></a>
 
 ### TODO Comments
@@ -245,16 +198,7 @@ good-enough but not perfect.
 
 This matches the convention in the [C++ Guide](https://google.github.io/styleguide/cppguide.html#TODO_Comments).
 
-`TODO`s should include the string `TODO` in all
-caps, followed by the name, e-mail address, or other identifier of the person
-with the best context about the problem referenced by
-the `TODO`. The main purpose is to have a consistent
-`TODO` that can be searched to find out how to get more
-details upon request. A `TODO` is not a commitment that the
-person referenced will fix the problem. Thus when you create a
-`TODO` , it is
-almost always your
-name that is given.
+`TODO`s should include the string `TODO` in all caps
 
 Examples:
 
@@ -281,7 +225,7 @@ faithful to the existing indentation.
 
 <a id="s5.2-line-length-and-long-strings"></a>
 
-### Line Length and Long Strings
+<!--### Line Length and Long Strings
 
 Maximum line length is 80 characters.
 
@@ -303,7 +247,9 @@ long_string="I am an exceptionally
 long string."
 ```
 
-<a id="s5.3-pipelines"></a>
+!-->
+
+<!--<a id="s5.3-pipelines"></a>
 
 ### Pipelines
 
@@ -328,7 +274,7 @@ command1 \
   | command4
 ```
 
-<a id="s5.4-loops"></a>
+<a id="s5.4-loops"></a>!-->
 
 ### Loops
 
@@ -427,6 +373,8 @@ done
 In order of precedence: Stay consistent with what you find; quote your
 variables; prefer `"${var}"` over `"$var"`.
 
+<!--
+
 These are strongly recommended guidelines but not mandatory
 regulation. Nonetheless, the fact that it's a recommendation and
 not mandatory doesn't mean it should be taken lightly or downplayed.
@@ -476,7 +424,7 @@ They are listed in order of precedence.
     ```
 
 NOTE: Using braces in `${var}` is *not* a form of quoting. "Double quotes" must
-be used *as well*.
+be used *as well*.!-->
 
 <a id="s5.7-quoting"></a>
 
@@ -485,6 +433,8 @@ be used *as well*.
 *   Always quote strings containing variables, command substitutions, spaces or
     shell meta characters, unless careful unquoted expansion is required or it's
     a shell-internal integer (see next point).
+
+<!--
 *   Use arrays for safe quoting of lists of elements, especially command-line
     flags. See [Arrays](#arrays) below.
 *   Optionally quote shell-internal, readonly special variables that are defined
@@ -495,6 +445,7 @@ be used *as well*.
 *   Never quote *literal* integers.
 *   Be aware of the quoting rules for pattern matches in `[[ … ]]`. See the
     [Test, `[ … ]`, and `[[ … ]]`](#tests) section below.
+    !-->
 *   Use `"$@"` unless you have a specific reason to use `$*`, such as simply
     appending the arguments to a string in a message or log.
 
@@ -582,9 +533,9 @@ small.
 
 ### Command Substitution
 
-Use `$(command)` instead of backticks.
+Use `$(command)` instead of backticks- ALWAYS.
 
-Nested backticks require escaping the inner ones with `\ `.
+<!--Nested backticks require escaping the inner ones with `\ `.
 The `$(command)` format doesn't change when nested and is
 easier to read.
 
@@ -598,7 +549,7 @@ var="$(command "$(command1)")"
 ```shell
 # This is not:
 var="`command \`command1\``"
-```
+```!-->
 
 <a id="s6.3-tests"></a>
 
@@ -1012,7 +963,7 @@ throughout a project.
 If you're writing single functions, use lowercase and separate words
 with underscore. If you're writing a package, separate package names
 with `::`. Braces must be on the same line as the function
-name (as with other languages at Google) and no space between the
+name (as with other languages at pracplay) and no space between the
 function name and the parenthesis.
 
 ```shell
@@ -1085,7 +1036,7 @@ readonly VERBOSE
 
 Lowercase, with underscores to separate words if desired.
 
-This is for consistency with other code styles in Google:
+This is for consistency with other code styles in pracplay:
 `maketemplate` or `make_template` but not
 `make-template`.
 
@@ -1113,8 +1064,7 @@ fi
 
 ### Use Local Variables
 
-Declare function-specific variables with `local`. Declaration
-and assignment should be on different lines.
+Declare function-specific variables with `local`. 
 
 Ensure that local variables are only seen inside a function and its
 children by using `local` when declaring them. This avoids
@@ -1164,7 +1114,7 @@ may be done before declaring functions.
 
 <a id="s7.8-main"></a>
 
-### main
+### main - IF YOU HAVE A SCRIPT WITH FUNCTIONS, START A CONVERSATION (rest are guidelines for that conversation)
 
 A function called `main` is required for scripts long enough
 to contain at least one other function.
@@ -1273,8 +1223,4 @@ substitution="$(echo "${string}" | sed -e 's/^foo/bar/')"
 
 Use common sense and *BE CONSISTENT*.
 
-Please take a few minutes to read the Parting Words section at the bottom
-of the
-[C++ Guide](https://google.github.io/styleguide/cppguide.html#Parting_Words).
-
-Revision 2.02
+Revision 1.00
