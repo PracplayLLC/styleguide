@@ -1,25 +1,24 @@
-# C# at Google Style Guide
+# C# at pracplay Style Guide
 
-This style guide is for C# code developed internally at Google, and is the
-default style for C# code at Google. It makes stylistic choices that conform to
-other languages at Google, such as Google C++ style and Google Java style.
+This style guide is for C# code developed internally at pracplay, and is the
+default style for C# code at pracplay. 
 
 ## Formatting guidelines
 
 ### Naming rules
 
 Naming rules follow
-[Microsoft's C# naming guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines).
+<!--[Microsoft's C# naming guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines).
 Where Microsoft's naming guidelines are unspecified (e.g. private and local
 variables), rules are taken from the
-[CoreFX C# coding guidelines](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md)
+[CoreFX C# coding guidelines](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md)!-->
 
 Rule summary:
 
 #### Code
 
 *   Names of classes, methods, enumerations, public fields, public properties,
-    namespaces: `PascalCase`.
+    namespaces: `snake_case`.
 *   Names of local variables, parameters: `camelCase`.
 *   Names of private, protected, internal and protected internal fields and
     properties: `_camelCase`.
@@ -27,13 +26,13 @@ Rule summary:
     readonly, etc.
 *   For casing, a "word" is anything written without internal spaces, including
     acronyms. For example, `MyRpc` instead of ~~`MyRPC`~~.
-*   Names of interfaces start with `I`, e.g. `IInterface`.
+*   Names of interfaces end with `I`, e.g. `InterfaceI`.
 
 #### Files
 
-*   Filenames and directory names are `PascalCase`, e.g. `MyFile.cs`.
+*   Filenames and directory names are `snake_case`, e.g. `my_file.cs`.
 *   Where possible the file name should be the same as the name of the main
-    class in the file, e.g. `MyClass.cs`.
+    class in the file, e.g. `my_class.cs`.
 *   In general, prefer one core class per file.
 
 ### Organization
@@ -46,11 +45,13 @@ Rule summary:
     first.
 *   Class member ordering:
     *   Group class members in the following order:
-        *   Nested classes, enums, delegates and events.
+        *   delegates and events.
         *   Static, const and readonly fields.
         *   Fields and properties.
         *   Constructors and finalizers.
+	*   Factories.
         *   Methods.
+	*   Nested classes and enums.
     *   Within each group, elements should be in the following order:
         *   Public.
         *   Internal.
@@ -61,21 +62,18 @@ Rule summary:
 
 ### Whitespace rules
 
-Developed from Google Java style.
-
 *   A maximum of one statement per line.
 *   A maximum of one assignment per statement.
 *   Indentation of 2 spaces, no tabs.
 *   Column limit: 100.
-*   No line break before opening brace.
-*   No line break between closing brace and `else`.
+*   Line break before opening brace.
+*   Line break between closing brace and `else`.
 *   Braces used even when optional.
 *   Space after `if`/`for`/`while` etc., and after commas.
 *   No space after an opening parenthesis or before a closing parenthesis.
 *   No space between a unary operator and its operand. One space between the
     operator and each operand of all other operators.
-*   Line wrapping developed from Google C++ style guidelines, with minor
-    modifications for compatibility with Microsoft's C# formatting tools:
+*   Line wrapping :
     *   In general, line continuations are indented 4 spaces.
     *   Line breaks with braces (e.g. list initializers, lambdas, object
         initializers, etc) do not count as continuations.
@@ -91,25 +89,27 @@ Developed from Google Java style.
 using System;                                       // `using` goes at the top, outside the
                                                     // namespace.
 
-namespace MyNamespace {                             // Namespaces are PascalCase.
+namespace MyNamespace 
+{                             // Namespaces are snake_case.
                                                     // Indent after namespace.
-  public interface IMyInterface {                   // Interfaces start with 'I'
-    public int Calculate(float value, float exp);   // Methods are PascalCase
+  public interface my_interfaceI
+  {                   // Interfaces end with 'I'
+    public int calculate(float value, float exp);   // Methods are snake_case
                                                     // ...and space after comma.
   }
 
-  public enum MyEnum {                              // Enumerations are PascalCase.
-    Yes,                                            // Enumerators are PascalCase.
-    No,
+  public enum my_enum {                              // Enumerations are snake_case.
+    yes,                                            // Enumerators are snake_case.
+    no,
   }
 
-  public class MyClass {                            // Classes are PascalCase.
-    public int Foo = 0;                             // Public member variables are
-                                                    // PascalCase.
-    public bool NoCounting = false;                 // Field initializers are encouraged.
-    private class Results {
-      public int NumNegativeResults = 0;
-      public int NumPositiveResults = 0;
+  public class my_class {                            // Classes are snake_case.
+    public int foo = 0;                             // Public member variables are
+                                                    // snake_case.
+    public bool isNoCounting = false;                 // Field initializers are encouraged.
+    private class results {
+      public int num_negative_results = 0;
+      public int num_positive_results = 0;
     }
     private Results _results;                       // Private member variables are
                                                     // _camelCase.
@@ -120,24 +120,28 @@ namespace MyNamespace {                             // Namespaces are PascalCase
       2, 3, 4,                                      // space indent.
     }
 
-    public MyClass() {
-      _results = new Results {
-        NumNegativeResults = 1,                     // Object initializers use a 2 space
-        NumPositiveResults = 1,                     // indent.
+    public my_class() {
+      _results = new results {
+        num_negative_results = 1,                     // Object initializers use a 2 space
+        num_positive_results = 1,                     // indent.
       };
     }
 
-    public int CalculateValue(int mulNumber) {      // No line break before opening brace.
+    public int calculate_value(int mulNumber) {      // No line break before opening brace.
       var resultValue = Foo * mulNumber;            // Local variables are camelCase.
       NumTimesCalled++;
       Foo += _bar;
 
-      if (!NoCounting) {                            // No space after unary operator and
+      if (!isNoCounting) 
+      {                            // No space after unary operator and
                                                     // space after 'if'.
-        if (resultValue < 0) {                      // Braces used even when optional and
+        if (resultValue < 0) 
+	{                      // Braces used even when optional and
                                                     // spaces around comparison operator.
           _results.NumNegativeResults++;
-        } else if (resultValue > 0) {               // No newline between brace and else.
+        } 
+	else if (resultValue > 0) 
+	{               // newline between brace and else.
           _results.NumPositiveResults++;
         }
       }
@@ -205,14 +209,14 @@ namespace MyNamespace {                             // Namespaces are PascalCase
 *   If `const` isn’t possible, `readonly` can be a suitable alternative.
 *   Prefer named constants to magic numbers.
 
-### IEnumerable vs IList vs IReadOnlyList
+<!--### IEnumerable vs IList vs IReadOnlyList
 
 *   For inputs use the most restrictive collection type possible, for example
     `IReadOnlyCollection` / `IReadOnlyList` / `IEnumerable` as inputs to methods
     when the inputs should be immutable.
 *   For outputs, if passing ownership of the returned container to the owner,
     prefer `IList` over `IEnumerable`. If not transferring ownership, prefer the
-    most restrictive option.
+    most restrictive option.!-->
 
 ### Generators vs containers
 
@@ -227,8 +231,8 @@ namespace MyNamespace {                             // Namespaces are PascalCase
 
 ### Property styles
 
-*   For single line read-only properties, prefer expression body properties
-    (`=>`) when possible.
+<!--*   For single line read-only properties, prefer expression body properties
+    (`=>`) when possible.!-->
 *   For everything else, use the older `{ get; set; }` syntax.
 
 ### Expression body syntax
@@ -236,15 +240,25 @@ namespace MyNamespace {                             // Namespaces are PascalCase
 For example:
 
 ```c#
-int SomeProperty => _someProperty
+int SomeProperty { get; set; }
 ```
 
-*   Judiciously use expression body syntax in lambdas and properties.
-*   Don’t use on method definitions. This will be reviewed when C# 7 is live,
-    which uses this syntax heavily.
 *   As with methods and other scoped blocks of code, align the closing with the
     first character of the line that includes the opening brace. See sample code
     for examples.
+
+### Boolean
+ * booleans should start with 'is', is should be avoided to prefix other vartypes
+ * if multiple words are needed, favor camelcase
+ * eg:
+   * bool iscompleted = true
+   * var iscompleted = true // var is ok since 'is' indicates boolean
+   * bool isValid { get; set; } 
+
+### switch vs if and enums
+
+ * switches should be preferred over enums for processes that are likely to be A/B tested
+ * when using a switch in these situations, prefer an enum if possible for case statements
 
 ### Structs and classes:
 
@@ -278,9 +292,10 @@ int SomeProperty => _someProperty
 
 ### Extension methods
 
-*   Only use an extension method when the source of the original class is not
+* Appropriate Usages of Extension methods:
+  *   When the source of the original class is not
     available, or else when changing the source is not feasible.
-*   Only use an extension method if the functionality being added is a ‘core’
+  *   Only use an extension method if the functionality being added is a ‘core’
     general feature that would be appropriate to add to the source of the
     original class.
     *   Note - if we have the source to the class being extended, and the
@@ -387,7 +402,7 @@ var x = new SomeClass {
 *   Notes:
 
     *   Nullable structs are convenient, but reinforce the general ‘null is
-        failure’ pattern Google prefers to avoid. We will investigate a
+        failure’ pattern pracplay prefers to avoid. We will investigate a
         `StatusOr` equivalent in the future, if there is enough demand.
 
 ### Removing from containers while iterating
@@ -437,8 +452,6 @@ removing items from containers while iterating. There are a couple of options:
     search for.
 
 ### Argument Naming
-
-Derived from the Google C++ style guide.
 
 When the meaning of a function argument is nonobvious, consider one of the
 following remedies:
